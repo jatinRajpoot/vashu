@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3 mb-4">
+    {% for label, value in {
+        'Total Rooms': stats.total_rooms,
+        'Available Rooms': stats.available_rooms,
+        'Total Users': stats.total_users,
+        'Pending Bookings': stats.pending_bookings,
+        'Total Bookings': stats.total_bookings,
+        'Today\'s Check-ins': stats.todays_checkins
+    }.items() %}
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted">{{ label }}</h6>
+                <p class="display-6">{{ value }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<h4>Recent Bookings</h4>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Dates</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.user.name }}</td>
+                <td>{{ booking.room.name }}</td>
+                <td>{{ booking.start_date }} → {{ booking.end_date }}</td>
+                <td><span class="badge bg-status-{{ booking.status }}">{{ booking.status|capitalize }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

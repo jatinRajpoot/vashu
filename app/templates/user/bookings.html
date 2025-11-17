@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}My Bookings - Hotel Manager{% endblock %}
+{% block content %}
+<h2 class="mb-4">My Bookings</h2>
+{% if bookings %}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Room</th>
+                <th>Dates</th>
+                <th>Status</th>
+                <th>Requested</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.room.name }}</td>
+                <td>{{ booking.start_date }} → {{ booking.end_date }}</td>
+                <td><span class="badge bg-status-{{ booking.status }}">{{ booking.status|capitalize }}</span></td>
+                <td>{{ booking.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    {% if booking.status in ['pending', 'approved'] %}
+                    <form method="post" action="{{ url_for('user.cancel_booking', booking_id=booking.id) }}">
+                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Cancel booking?')">Cancel</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-secondary">No bookings yet.</div>
+{% endif %}
+{% endblock %}

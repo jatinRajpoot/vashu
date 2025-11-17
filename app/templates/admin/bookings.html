@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Manage Bookings{% endblock %}
+{% block content %}
+<h2 class="mb-4">Bookings</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Dates</th>
+                <th>Status</th>
+                <th>Requested</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.user.name }}</td>
+                <td>{{ booking.room.name }}</td>
+                <td>{{ booking.start_date }} → {{ booking.end_date }}</td>
+                <td><span class="badge bg-status-{{ booking.status }}">{{ booking.status|capitalize }}</span></td>
+                <td>{{ booking.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('admin.update_booking_status', booking_id=booking.id) }}" class="d-flex gap-2">
+                        <select class="form-select form-select-sm" name="status">
+                            {% for option in ['pending','approved','rejected','cancelled'] %}
+                            <option value="{{ option }}" {% if booking.status == option %}selected{% endif %}>{{ option|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-sm btn-outline-primary">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

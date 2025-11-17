@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Manage Rooms{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Rooms</h2>
+    <a class="btn btn-primary" href="{{ url_for('admin.create_room') }}">Add Room</a>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Available</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>
+                    <div class="room-thumb">
+                        <img src="{{ room_image_url(room.image_filename) }}" alt="{{ room.name }} thumbnail">
+                    </div>
+                </td>
+                <td>{{ room.name }}</td>
+                <td>{{ room.room_type }}</td>
+                <td>${{ '%.2f'|format(room.price) }}</td>
+                <td>{{ 'Yes' if room.is_available else 'No' }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.edit_room', room_id=room.id) }}">Edit</a>
+                    <form method="post" action="{{ url_for('admin.delete_room', room_id=room.id) }}" class="d-inline">
+                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete room?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

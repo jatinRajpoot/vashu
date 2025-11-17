@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Vashu Hotels – Luxury Reimagined{% endblock %}
+{% block page_wrapper %}landing-wrapper{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero__eyebrow">Vashu Hotels · Est. 1998</div>
+    <h1 class="hero__title">Where contemporary design meets curated hospitality.</h1>
+    <p class="hero__copy">
+        Escape to panoramic suites, private lounges, and destination dining crafted for discerning travelers. Every stay
+        unfolds with a personal host, bespoke itineraries, and seamless technology at your fingertips.
+    </p>
+    <div class="hero__actions">
+        {% if current_user.is_authenticated %}
+        <a class="btn btn-contrast" href="{{ url_for('user.rooms') }}">Book your stay</a>
+        <a class="btn btn-outline" href="{{ url_for('user.bookings') }}">Your reservations</a>
+        {% else %}
+        <a class="btn btn-contrast" href="{{ url_for('auth.register') }}">Become a member</a>
+        <a class="btn btn-outline" href="{{ url_for('auth.login') }}">Sign in</a>
+        {% endif %}
+    </div>
+    <div class="hero__metrics">
+        <div>
+            <span class="hero__metric">35+</span>
+            <p>Signature suites in iconic destinations</p>
+        </div>
+        <div>
+            <span class="hero__metric">24/7</span>
+            <p>Concierge, wellness, and culinary service</p>
+        </div>
+        <div>
+            <span class="hero__metric">4.9</span>
+            <p>Guest satisfaction rating worldwide</p>
+        </div>
+    </div>
+</section>
+
+<section id="rooms" class="section section--light">
+    <div class="section__header">
+        <div>
+            <p class="eyebrow">Featured stays</p>
+            <h2>Suites curated for the modern traveler.</h2>
+        </div>
+        <div class="section__cta">
+            <a href="{{ url_for('user.rooms') if current_user.is_authenticated else url_for('auth.login') }}" class="link-arrow">
+                Explore all suites
+                <span>&rarr;</span>
+            </a>
+        </div>
+    </div>
+    <div class="room-grid">
+        {% if rooms %}
+            {% for room in rooms %}
+            <article class="room-card room-card--landing">
+                <div class="room-card__media">
+                    <img src="{{ room_image_url(room.image_filename) }}" alt="{{ room.name }} photo" loading="lazy">
+                    <span class="room-card__badge">{{ room.room_type }}</span>
+                </div>
+                <div class="room-card__body">
+                    <div>
+                        <h3>{{ room.name }}</h3>
+                        <p>{{ room.description[:150] }}{% if room.description|length > 150 %}&hellip;{% endif %}</p>
+                    </div>
+                    <div class="room-card__footer">
+                        <div>
+                            <span class="label">From</span>
+                            <strong>${{ '%.0f'|format(room.price) }} / night</strong>
+                        </div>
+                        <a class="btn btn-ghost" href="{{ url_for('user.room_detail', room_id=room.id) if current_user.is_authenticated else url_for('auth.login') }}">
+                            View details
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <p>No rooms available at the moment. Check back soon.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section id="experience" class="section section--dark">
+    <div class="section__header">
+        <div>
+            <p class="eyebrow">The Vashu signature</p>
+            <h2>Intuitive service layers across every touchpoint.</h2>
+        </div>
+    </div>
+    <div class="pillars">
+        <div class="pillar">
+            <h3>Immersive wellness</h3>
+            <p>Private spa suites, in-room infrared therapy, and ritual-led wellness calendars ensure deep restoration.</p>
+        </div>
+        <div class="pillar">
+            <h3>Destination dining</h3>
+            <p>Michelin-guided chefs and sommeliers collaborate on progressive tasting menus in every property.</p>
+        </div>
+        <div class="pillar">
+            <h3>Thoughtful technology</h3>
+            <p>Keyless entry, ambient controls, and digital hosts keep your stay personal yet effortlessly discreet.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

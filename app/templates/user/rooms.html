@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Suites · Vashu Hotels{% endblock %}
+{% block content %}
+<section class="page-intro">
+    <p class="eyebrow">Member exclusives</p>
+    <div class="intro__header">
+        <h1>Your private collection of Vashu suites.</h1>
+        <p>Reserve ocean residences, skyline lofts, and garden villas tailored by our concierge collective. Pricing updates live with every availability change.</p>
+    </div>
+</section>
+
+{% if rooms %}
+<div class="room-grid room-grid--interior">
+    {% for room in rooms %}
+    <article class="room-card">
+        <div class="room-card__media">
+            <img src="{{ room_image_url(room.image_filename) }}" alt="{{ room.name }} photo" loading="lazy">
+            <span class="room-card__badge">{{ room.room_type }}</span>
+        </div>
+        <div class="room-card__body">
+            <div>
+                <h3>{{ room.name }}</h3>
+                <p>{{ room.description[:160] }}{% if room.description|length > 160 %}&hellip;{% endif %}</p>
+            </div>
+            <div class="room-card__footer">
+                <div>
+                    <span class="label">Nightly from</span>
+                    <strong>${{ '%.2f'|format(room.price) }}</strong>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a class="btn btn-ghost" href="{{ url_for('user.room_detail', room_id=room.id) }}">View</a>
+                    <a class="btn btn-contrast" href="{{ url_for('user.room_detail', room_id=room.id) }}">Book</a>
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No rooms available right now.</p>
+</div>
+{% endif %}
+{% endblock %}

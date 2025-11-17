@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Manage Users{% endblock %}
+{% block content %}
+<h2 class="mb-4">Users</h2>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ 'Admin' if user.is_admin else 'Guest' }}</td>
+                <td>{{ 'Active' if user.is_active else 'Inactive' }}</td>
+                <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    {% if not user.is_admin %}
+                    <form method="post" action="{{ url_for('admin.toggle_user', user_id=user.id) }}">
+                        <button class="btn btn-sm {{ 'btn-outline-danger' if user.is_active else 'btn-outline-success' }}">
+                            {{ 'Disable' if user.is_active else 'Enable' }}
+                        </button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

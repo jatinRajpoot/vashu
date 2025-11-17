@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ room.name }} · Vashu Hotels{% endblock %}
+{% block content %}
+<section class="detail-hero">
+    <div class="detail-hero__media">
+        <img src="{{ room_image_url(room.image_filename) }}" alt="{{ room.name }} photo">
+    </div>
+    <div class="detail-hero__body">
+        <p class="eyebrow">{{ room.room_type }}</p>
+        <h1>{{ room.name }}</h1>
+        <p>{{ room.description }}</p>
+        <div class="detail-hero__rate">
+            <span>Nightly rate</span>
+            <strong>${{ '%.2f'|format(room.price) }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="detail-grid">
+    <div class="detail-grid__content">
+        <div class="detail-card">
+            <h3>Signature inclusions</h3>
+            <ul>
+                <li>Dedicated experience host and 24/7 concierge chat.</li>
+                <li>Private arrival lounge with sparkling welcome ritual.</li>
+                <li>Evening turndown aromatherapy and pillow menu.</li>
+                <li>Complimentary access to wellness suites and pool cabanas.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="detail-grid__booking">
+        <div class="detail-booking">
+            <h4>Reserve this suite</h4>
+            <form method="post" action="{{ url_for('user.create_booking', room_id=room.id) }}" class="detail-booking__form">
+                <label class="form-label">Check-in</label>
+                <input type="date" class="form-control" name="start_date" required>
+                <label class="form-label mt-3">Check-out</label>
+                <input type="date" class="form-control" name="end_date" required>
+                <button class="btn btn-contrast w-100 mt-4" {% if not room.is_available %}disabled{% endif %}>
+                    Request stay
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
