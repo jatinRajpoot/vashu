@@ -63,7 +63,7 @@
                     <div class="room-card__footer">
                         <div>
                             <span class="label">From</span>
-                            <strong>${{ '%.0f'|format(room.price) }} / night</strong>
+                            <strong>₹{{ '%.0f'|format(room.price) }} / night</strong>
                         </div>
                         <a class="btn btn-ghost" href="{{ url_for('user.room_detail', room_id=room.id) if current_user.is_authenticated else url_for('auth.login') }}">
                             View details

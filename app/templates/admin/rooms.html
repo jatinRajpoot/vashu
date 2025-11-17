@@ -27,7 +27,7 @@
                 </td>
                 <td>{{ room.name }}</td>
                 <td>{{ room.room_type }}</td>
-                <td>${{ '%.2f'|format(room.price) }}</td>
+                <td>₹{{ '%.2f'|format(room.price) }}</td>
                 <td>{{ 'Yes' if room.is_available else 'No' }}</td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.edit_room', room_id=room.id) }}">Edit</a>
